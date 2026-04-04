@@ -1,0 +1,15 @@
+csv_file: config/pair_data.csv
+template_file: config/template.set
+template_pattern: "SRM_v6.0_AlgoX_REAL-{pairName}-{timeFrame}-{nextYear}0101-{nextYear}1231-{Spread}-TEP{TepVar}_TBBB{year}.set"
+spread: "15"
+open_order_buffer_pct: 30
+equity_assumption: "30000.00000000"
+real_equity: "10000.00000000"
+tep_var: "21"
+take_profit_ratio: "0.70000000"
+pullback_ratio: "0.00000000"
+drop_ratio: "0.10000000"
+brounce_ratio: "0.05000000"
+timeFrame: H1
+magic_number_start: null
+output_dir: output

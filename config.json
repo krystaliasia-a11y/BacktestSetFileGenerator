@@ -1,8 +1,0 @@
-{
-    "csv_file": "pair_data.csv",
-    "template_pattern": "SRM_v6.0_AlgoX_REAL-{pairName}-{timeFrame}-{nextYear}0101-{nextYear}1231-TEP{TepVar}_TBBB{year}.set",
-    "tep_var": "0",
-    "timeFrame": "H1",
-    "magic_number_start": null,
-    "output_dir": "output"
-}
