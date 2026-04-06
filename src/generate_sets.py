@@ -109,6 +109,7 @@ def main():
     enable_buy_order = str(config.get('enable_buy_order', '1'))
     enable_sell_order = str(config.get('enable_sell_order', '1'))
     max_instant_order_level = str(config.get('max_instant_order_level', '2'))
+    max_orders_per_side = str(config.get('max_orders_per_side', '110'))
     opt_tep = str(config.get('opt_tep', '0'))
     margin_level_to_open_new_orders = str(config.get('margin_level_to_open_new_orders', '150'))
 
@@ -139,6 +140,7 @@ def main():
     print(f"  EnableBuyOrder: {enable_buy_order}")
     print(f"  EnableSellOrder: {enable_sell_order}")
     print(f"  MaxInstantOrderLevel: {max_instant_order_level}")
+    print(f"  MaxOrdersPerSide: {max_orders_per_side}")
     print(f"  OptTEP: {opt_tep}")
     print(f"  MarginLevelToOpenNewOrders: {margin_level_to_open_new_orders}")
     print(f"  Output Directory: {output_dir}")
@@ -226,6 +228,7 @@ def main():
                     new_content = new_content.replace('{EnableBuyOrder}', enable_buy_order)
                     new_content = new_content.replace('{EnableSellOrder}', enable_sell_order)
                     new_content = new_content.replace('{MaxInstantOrderLevel}', max_instant_order_level)
+                    new_content = new_content.replace('{MaxOrdersPerSide}', max_orders_per_side)
                     new_content = new_content.replace('{OptTEP}', opt_tep)
                     new_content = new_content.replace('{MarginLevelToOpenNewOrders}', margin_level_to_open_new_orders)
 

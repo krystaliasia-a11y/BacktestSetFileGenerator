@@ -8,9 +8,10 @@ enable_buy_order: "1"                       #Enable buy order
 enable_sell_order: "1"                      #Enable sell order
 open_order_buffer_pct: 30                   #Buffer percent used to computes open-buy and open-sell thresholds
 max_instant_order_level: "2"                #Max instant order level
+max_orders_per_side: "111"                  #Max order per side
 equity_assumption: "30000"                  #Equity Assumption
 real_equity: "10000"                        #Real Equity
-tep_var: "30"                               #Target Earning Percentage (TEP)
+tep_var: "20"                               #Target Earning Percentage (TEP)
 opt_tep: "0"                                #Optimal TEP
 take_profit_ratio: "1.8"                    #Take Profit Ratio
 pullback_ratio: "0.8"                       #Pullback Ratio
