@@ -1,15 +1,23 @@
+# System config 
 csv_file: config/pair_data.csv
 template_file: config/template.set
-template_pattern: "SRM_v6.0_AlgoX_REAL-{pairName}-{timeFrame}-{nextYear}0101-{nextYear}1231-{Spread}-TEP{TepVar}_TBBB{year}.set"
-spread: "15"
-open_order_buffer_pct: 30
-equity_assumption: "30000.00000000"
-real_equity: "10000.00000000"
-tep_var: "21"
-take_profit_ratio: "0.70000000"
-pullback_ratio: "0.00000000"
-drop_ratio: "0.10000000"
-brounce_ratio: "0.05000000"
-timeFrame: H1
-magic_number_start: null
+template_pattern: "SRM_v6.0_AlgoX_REAL-{pairName}-{timeFrame}-{nextYear}0101-{nextYear}1231-{Spread}-TEP{TepVar}_TBBB{year}_TR{TakeProfitRatio}PB{PullbackRatio}DR{DropRatio}BR{BrounceRatio}_Margin{Leverage}X.set"
 output_dir: output
+# SRM parameters
+enable_buy_order: "1"                       #Enable buy order
+enable_sell_order: "1"                      #Enable sell order
+open_order_buffer_pct: 30                   #Buffer percent used to computes open-buy and open-sell thresholds
+max_instant_order_level: "2"                #Max instant order level
+equity_assumption: "30000"                  #Equity Assumption
+real_equity: "10000"                        #Real Equity
+tep_var: "30"                               #Target Earning Percentage (TEP)
+opt_tep: "0"                                #Optimal TEP
+take_profit_ratio: "1.8"                    #Take Profit Ratio
+pullback_ratio: "0.8"                       #Pullback Ratio
+drop_ratio: "1.5"                           #Drop Ratio
+brounce_ratio: "1.0"                        #Rebound Ratio
+margin_level_to_open_new_orders: "150"      #Margin level to open new orders
+magic_number_start: null
+# MT4 parameters
+spread: "15"                                #Spread
+timeFrame: H1

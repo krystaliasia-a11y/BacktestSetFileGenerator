@@ -25,26 +25,6 @@ def load_config(config_filename=None):
     path = config_filename or os.path.join(PROJECT_ROOT, 'config', 'config.yaml')
     if not os.path.exists(path):
         print(f"Error: Could not find '{path}'.")
-        print("\nExample config.yaml:")
-        print(
-            """\
-csv_file: config/pair_data.csv
-template_file: config/template.set
-template_pattern: "SRM_v6.0_AlgoX_REAL-{pairName}-{timeFrame}-{nextYear}0101-{nextYear}1231-{Spread}-TEP{TepVar}_TBBB{year}.set"
-spread: "15"
-open_order_buffer_pct: 5
-equity_assumption: "10000.00000000"
-real_equity: "10000.00000000"
-tep_var: "0"
-take_profit_ratio: "0.70000000"
-pullback_ratio: "0.00000000"
-drop_ratio: "0.10000000"
-brounce_ratio: "0.05000000"
-timeFrame: H1
-magic_number_start: null
-output_dir: output
-"""
-        )
         sys.exit(1)
 
     try:
@@ -80,6 +60,17 @@ def format_price_level(value):
     return f'{float(value):.8f}'
 
 
+def format_leverage_for_filename(equity_str, real_equity_str):
+    """equity_assumption / real_equity for template_pattern {Leverage} (compact, filename-safe)."""
+    eq = float(equity_str)
+    re_val = float(real_equity_str)
+    if re_val == 0:
+        raise ValueError('real_equity must not be zero when computing Leverage (equity_assumption/real_equity)')
+    v = eq / re_val
+    s = f'{v:.8f}'.rstrip('0').rstrip('.')
+    return s if s else '0'
+
+
 def open_order_thresholds(tip_high, dip_low, buffer_pct):
     """
     buffer_pct is percent of (Tip - Dip) trimmed from each end of the range.
@@ -103,7 +94,7 @@ def main():
     template_path = resolve_path(config.get('template_file', 'config/template.set'))
     template_pattern = config.get(
         'template_pattern',
-        'SRM_v6.0_AlgoX_REAL-{pairName}-{timeFrame}-{nextYear}0101-{nextYear}1231-{Spread}-TEP{TepVar}_TBBB{year}.set',
+        'SRM_v6.0_AlgoX_REAL-{pairName}-{timeFrame}-{nextYear}0101-{nextYear}1231-{Spread}-TEP{TepVar}_TBBB{year}_TR{TakeProfitRatio}PB{PullbackRatio}DR{DropRatio}BR{BrounceRatio}_LE{Leverage}.set',
     )
     equity_assumption = str(config.get('equity_assumption', '10000.00000000'))
     real_equity = str(config.get('real_equity', '10000.00000000'))
@@ -115,6 +106,17 @@ def main():
     spread = str(config.get('spread', '0'))
     open_order_buffer_pct = config.get('open_order_buffer_pct', 0)
     time_frame = str(config.get('timeFrame', 'H1'))
+    enable_buy_order = str(config.get('enable_buy_order', '1'))
+    enable_sell_order = str(config.get('enable_sell_order', '1'))
+    max_instant_order_level = str(config.get('max_instant_order_level', '2'))
+    opt_tep = str(config.get('opt_tep', '0'))
+    margin_level_to_open_new_orders = str(config.get('margin_level_to_open_new_orders', '150'))
+
+    try:
+        leverage_str = format_leverage_for_filename(equity_assumption, real_equity)
+    except ValueError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
     magic_number_start = config.get('magic_number_start', None)
     output_dir = resolve_path(config.get('output_dir', 'output'))
 
@@ -130,9 +132,15 @@ def main():
     print(f"  PullbackRatio: {pullback_ratio}")
     print(f"  DropRatio: {drop_ratio}")
     print(f"  BrounceRatio: {brounce_ratio}")
+    print(f"  Leverage (equity_assumption/real_equity): {leverage_str}")
     print(f"  Spread: {spread}")
     print(f"  Open order buffer %: {open_order_buffer_pct}")
     print(f"  TimeFrame: {time_frame}")
+    print(f"  EnableBuyOrder: {enable_buy_order}")
+    print(f"  EnableSellOrder: {enable_sell_order}")
+    print(f"  MaxInstantOrderLevel: {max_instant_order_level}")
+    print(f"  OptTEP: {opt_tep}")
+    print(f"  MarginLevelToOpenNewOrders: {margin_level_to_open_new_orders}")
     print(f"  Output Directory: {output_dir}")
     print("=" * 50)
 
@@ -211,9 +219,15 @@ def main():
                     new_content = new_content.replace('{PullbackRatio}', pullback_ratio)
                     new_content = new_content.replace('{DropRatio}', drop_ratio)
                     new_content = new_content.replace('{BrounceRatio}', brounce_ratio)
+                    new_content = new_content.replace('{Leverage}', leverage_str)
                     new_content = new_content.replace('{MagicNumber}', str(magic_number))
                     new_content = new_content.replace('{timeFrame}', time_frame)
                     new_content = new_content.replace('{nextYear}', next_year)
+                    new_content = new_content.replace('{EnableBuyOrder}', enable_buy_order)
+                    new_content = new_content.replace('{EnableSellOrder}', enable_sell_order)
+                    new_content = new_content.replace('{MaxInstantOrderLevel}', max_instant_order_level)
+                    new_content = new_content.replace('{OptTEP}', opt_tep)
+                    new_content = new_content.replace('{MarginLevelToOpenNewOrders}', margin_level_to_open_new_orders)
 
                     output_filename = template_pattern.replace('{pairName}', pair_name)
                     output_filename = output_filename.replace('{timeFrame}', time_frame)
@@ -221,6 +235,11 @@ def main():
                     output_filename = output_filename.replace('{Spread}', spread)
                     output_filename = output_filename.replace('{TepVar}', tep_var)
                     output_filename = output_filename.replace('{year}', year)
+                    output_filename = output_filename.replace('{TakeProfitRatio}', take_profit_ratio)
+                    output_filename = output_filename.replace('{PullbackRatio}', pullback_ratio)
+                    output_filename = output_filename.replace('{DropRatio}', drop_ratio)
+                    output_filename = output_filename.replace('{BrounceRatio}', brounce_ratio)
+                    output_filename = output_filename.replace('{Leverage}', leverage_str)
 
                     new_content = new_content.replace('{CustomComment}', output_filename)
 
