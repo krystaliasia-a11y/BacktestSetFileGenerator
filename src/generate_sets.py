@@ -104,6 +104,7 @@ def main():
     drop_ratio = str(config.get('drop_ratio', '0.10000000'))
     brounce_ratio = str(config.get('brounce_ratio', '0.05000000'))
     spread = str(config.get('spread', '0'))
+    enable_open_order_buffer_pct = str(config.get('enable_open_order_buffer_pct', '1'))
     open_order_buffer_pct = config.get('open_order_buffer_pct', 0)
     time_frame = str(config.get('timeFrame', 'H1'))
     enable_buy_order = str(config.get('enable_buy_order', '1'))
@@ -135,6 +136,7 @@ def main():
     print(f"  BrounceRatio: {brounce_ratio}")
     print(f"  Leverage (equity_assumption/real_equity): {leverage_str}")
     print(f"  Spread: {spread}")
+    print(f"  EnableOpenOrderBufferPct: {enable_open_order_buffer_pct}")
     print(f"  Open order buffer %: {open_order_buffer_pct}")
     print(f"  TimeFrame: {time_frame}")
     print(f"  EnableBuyOrder: {enable_buy_order}")
@@ -203,9 +205,13 @@ def main():
 
                     next_year = calculate_next_year(year)
 
-                    ob_larger, ob_smaller = open_order_thresholds(
-                        price_high, price_low, open_order_buffer_pct
-                    )
+                    if enable_open_order_buffer_pct == '1':
+                        ob_larger, ob_smaller = open_order_thresholds(
+                            price_high, price_low, open_order_buffer_pct
+                        )
+                    else:
+                        ob_larger = format_price_level(0)
+                        ob_smaller = format_price_level(0)
 
                     new_content = template_content.replace('{PriceHighest}', price_high)
                     new_content = new_content.replace('{PriceLowest}', price_low)
