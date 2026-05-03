@@ -6,6 +6,7 @@ output_dir: output
 # SRM parameters
 enable_buy_order: "1"                       #Enable buy order
 enable_sell_order: "1"                      #Enable sell order
+enable_open_order_buffer_pct: "1"           #Enable open order buffer pct (1=enabled, 0=disabled; sets thresholds to 0 when disabled)
 open_order_buffer_pct: 30                   #Buffer percent used to computes open-buy and open-sell thresholds
 max_instant_order_level: "2"                #Max instant order level
 max_orders_per_side: "111"                  #Max order per side
