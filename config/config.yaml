@@ -6,19 +6,19 @@ output_dir: output
 # SRM parameters
 enable_buy_order: "1"                       #Enable buy order
 enable_sell_order: "1"                      #Enable sell order
-open_order_buffer_pct: 30                   #Buffer percent used to computes open-buy and open-sell thresholds
-max_instant_order_level: "2"                #Max instant order level
-max_orders_per_side: "111"                  #Max order per side
+open_order_buffer_pct: 0                   #Buffer percent used to computes open-buy and open-sell thresholds
+max_instant_order_level: "0"                #Max instant order level
+max_orders_per_side: "80"                  #Max order per side
 equity_assumption: "30000"                  #Equity Assumption
 real_equity: "10000"                        #Real Equity
-tep_var: "20"                               #Target Earning Percentage (TEP)
+tep_var: "5"                               #Target Earning Percentage (TEP)
 opt_tep: "0"                                #Optimal TEP
-take_profit_ratio: "1.8"                    #Take Profit Ratio
-pullback_ratio: "0.8"                       #Pullback Ratio
-drop_ratio: "1.5"                           #Drop Ratio
-brounce_ratio: "1.0"                        #Rebound Ratio
+take_profit_ratio: "0.1"                    #Take Profit Ratio
+pullback_ratio: "0"                       #Pullback Ratio
+drop_ratio: "0.5"                           #Drop Ratio
+brounce_ratio: "0"                        #Rebound Ratio
 margin_level_to_open_new_orders: "150"      #Margin level to open new orders
 magic_number_start: null
 # MT4 parameters
 spread: "15"                                #Spread
-timeFrame: H1
+timeFrame: M1

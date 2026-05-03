@@ -59,12 +59,12 @@ ignore_account_limit_orders,1=0
 ignore_account_limit_orders,2=1
 ignore_account_limit_orders,3=1
 dummy3======Range Setting=====
-price_highest=0.951
+price_highest={PriceHighest}
 price_highest,F=0
 price_highest,1=1.17000000
 price_highest,2=0.00000000
 price_highest,3=0.00000000
-price_lowest=0.815
+price_lowest={PriceLowest}
 price_lowest,F=0
 price_lowest,1=0.98000000
 price_lowest,2=0.00000000
